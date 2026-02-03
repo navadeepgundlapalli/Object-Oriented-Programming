@@ -10,7 +10,7 @@ int main() {
     cin >> vegs;
 
     while(count < vegs) {
-        cout << "\nEnter price per kg: ";
+        cout << "Enter price per kg: ";
         cin >> rate;
 
         cout << "Enter weight (kg): ";
@@ -22,7 +22,7 @@ int main() {
         count++;
     }
 
-    cout << "\nFinal Amount to Pay = " << grandTotal << endl;
+    cout << "Final Amount to Pay = " << grandTotal << endl;
 
     return 0;
 }
