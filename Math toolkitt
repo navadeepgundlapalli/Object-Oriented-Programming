@@ -1,0 +1,159 @@
+#include <iostream>
+#include <cmath>
+using namespace std;
+
+int add() {
+    int n, num, sum = 0;
+    cout << "How many numbers do you want to add? ";
+    cin >> n;
+
+    for(int i = 1; i <= n; i++) {
+        cout << "Enter number " << i << ": ";
+        cin >> num;
+        sum += num;
+    }
+    return sum;
+}
+
+int multiply() {
+    int n, num, product = 1;
+    cout << "How many numbers do you want to multiply? ";
+    cin >> n;
+
+    for(int i = 1; i <= n; i++) {
+        cout << "Enter number " << i << ": ";
+        cin >> num;
+        product *= num;
+    }
+    return product;
+}
+int subtract() {
+    int n, num, result;
+
+    cout << "How many numbers? ";
+    cin >> n;
+
+    cout << "Enter number 1: ";
+    cin >> result;
+
+    for(int i = 2; i <= n; i++) {
+        cout << "Enter number " << i << ": ";
+        cin >> num;
+        result -= num;
+    }
+    return result;
+}
+
+bool divide(float &result) {
+    int n;
+    float num;
+
+    cout << "How many numbers? ";
+    cin >> n;
+
+    cout << "Enter number 1: ";
+    cin >> result;
+
+    for(int i = 2; i <= n; i++) {
+        cout << "Enter number " << i << ": ";
+        cin >> num;
+
+        if(num == 0)
+            return false;
+
+        result /= num;
+    }
+    return true;
+}
+
+inline int cube(int x) {
+    return x * x * x;
+}
+
+double power(double base) {
+    return base * base;
+}
+
+double power(double base, double exp) {
+    return pow(base, exp);
+}
+int factorial(int n) {
+    int fact = 1;
+    for(int i = 1; i <= n; i++)
+        fact *= i;
+    return fact;
+}
+int main() {
+
+    int choice, num;
+    double exp;
+    float result;
+
+    cout << "----- MATH TOOLKIT -----" << endl;
+    cout << "1. Addition" << endl;
+    cout << "2. Subtraction" << endl;
+    cout << "3. Multiplication" << endl;
+    cout << "4. Division" << endl;
+    cout << "5. Cube" << endl;
+    cout << "6. Power" << endl;
+    cout << "7. Factorial" << endl;
+    cout << "Enter your choice: ";
+    cin >> choice;
+
+    switch(choice) {
+
+        case 1:
+            cout << "Result: " << add();
+            break;
+
+        case 2:
+            cout << "Result: " << subtract();
+            break;
+
+        case 3:
+            cout << "Result: " << multiply();
+            break;
+
+        case 4:
+            if(divide(result))
+                cout << "Result: " << result;
+            else
+                cout << "Cannot divide by zero";
+            break;
+
+        case 5:
+            cout << "Enter number: ";
+            cin >> num;
+            cout << "Result: " << cube(num);
+            break;
+
+        case 6: {
+            int option;
+            cout << "Enter 1 for square or 2 for power: ";
+            cin >> option;
+
+            if(option == 1){
+                cout << "Enter number: ";
+                cin >> num;
+                cout << "Result: " << power(num);
+            }
+            else{
+                cout << "Enter base and exponent: ";
+                cin >> num >> exp;
+                cout << "Result: " << power(num, exp);
+            }
+            break;
+        }
+
+        case 7:
+            cout << "Enter number: ";
+            cin >> num;
+            cout << "Result: " << factorial(num);
+            break;
+
+        default:
+            cout << "Invalid choice!";
+    }
+
+    return 0;
+}       
