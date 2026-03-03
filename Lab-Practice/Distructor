@@ -1,0 +1,25 @@
+#include <iostream>                 
+using namespace std;
+class box{
+      int length, width, height;
+      public:
+        box(int l, int b, int h){
+                length = l;
+                width = b;
+                height = h;
+        }
+        int volume(){
+                return length * width * height;
+        }   
+        void display(){
+                cout<<"volume of box is: "<<volume()<<endl;
+        }   
+    };
+int main(){
+    int l, b, h;
+    cout<<"Enter length, width and height: ";
+    cin>>l>>b>>h;
+    box b1(l, b, h);
+    b1.display();
+    return 0;
+}
