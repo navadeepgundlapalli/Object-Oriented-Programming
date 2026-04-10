@@ -1,0 +1,132 @@
+#include <iostream>
+#include <fstream>
+#include <cstdio>
+using namespace std;
+
+class Product
+{
+    string id;
+    string name;
+    float price;
+
+public:
+
+    void addProduct()
+    {
+        ofstream file;
+        file.open("product.txt", ios::app);
+
+        cout << "Enter Product ID: ";
+        cin >> id;
+
+        cout << "Enter Product Name: ";
+        cin >> name;
+
+        cout << "Enter Product Price: ";
+        cin >> price;
+
+        file << id << " " << name << " " << price << endl;
+
+        file.close();
+
+        cout << "Product saved successfully.\n";
+    }
+
+    void viewProducts()
+    {
+        ifstream file("product.txt");
+
+        string pid, pname;
+        float pprice;
+
+        cout << "\n===== Product Records =====\n";
+
+        if(!file)
+        {
+            cout << "No file found.\n";
+            return;
+        }
+
+        while(file >> pid >> pname >> pprice)
+        {
+            cout << "ID: " << pid << endl;
+            cout << "Name: " << pname << endl;
+            cout << "Price: " << pprice << endl;
+            cout << "----------------------\n";
+        }
+
+        file.close();
+    }
+
+    void updateProduct()
+    {
+        string searchId;
+        bool found = false;
+
+        cout << "Enter Product ID to update: ";
+        cin >> searchId;
+
+        ifstream file("product.txt");
+        ofstream temp("temp.txt");
+
+        string pid, pname;
+        float pprice;
+
+        while(file >> pid >> pname >> pprice)
+        {
+            if(pid == searchId)
+            {
+                found = true;
+
+                cout << "Enter New Name: ";
+                cin >> pname;
+
+                cout << "Enter New Price: ";
+                cin >> pprice;
+            }
+
+            temp << pid << " " << pname << " " << pprice << endl;
+        }
+
+        file.close();
+        temp.close();
+
+        remove("product.txt");
+        rename("temp.txt", "product.txt");
+
+        if(found)
+            cout << "Product updated successfully.\n";
+        else
+            cout << "Product not found.\n";
+    }
+};
+
+int main()
+{
+    Product p;
+    int choice;
+
+    do
+    {
+        cout << "\n===== Product Record System =====\n";
+        cout << "1. Add Product\n";
+        cout << "2. View Products\n";
+        cout << "3. Update Product\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        if(choice == 1)
+            p.addProduct();
+
+        else if(choice == 2)
+            p.viewProducts();
+
+        else if(choice == 3)
+            p.updateProduct();
+
+    } 
+    while(choice != 4);
+
+    return 0;
+}
