@@ -1,0 +1,44 @@
+#include<iostream>
+using namespace std;
+
+class Animal
+{
+public:
+    virtual void sound()
+    {
+        cout << "This is a generic animal sound" << endl;
+    }
+};
+
+class Dog : public Animal
+{
+public:
+    void sound() override
+    {
+        cout << "Dog says: Woof woof!" << endl;
+    }
+};
+
+class Cat : public Animal
+{
+public:
+    void sound() override
+    {
+        cout << "Cat says: Meow meow!" << endl;
+    }
+};
+
+int main()
+{
+    Animal *animalPtr;
+    Dog dog;
+    Cat cat;
+
+    animalPtr = &dog;
+    animalPtr->sound();
+
+    animalPtr = &cat;
+    animalPtr->sound();
+
+    return 0;
+}
