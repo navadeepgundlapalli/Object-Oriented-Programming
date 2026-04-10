@@ -1,0 +1,510 @@
+#include <iostream>
+#include <fstream>
+#include <vector>
+
+using namespace std;
+
+void line()
+{
+    cout<<"====================================================\n";
+}
+
+void smallLine()
+{
+    cout<<"----------------------------------------------------\n";
+}
+
+void welcomeScreen()
+{
+    line();
+    cout<<"        LIBRARY MANAGEMENT SYSTEM\n";
+    cout<<"            Marwadi University\n";
+    line();
+}
+
+void menuScreen()
+{
+    cout<<"\n";
+    line();
+    cout<<"                    MAIN MENU\n";
+    line();
+
+    cout<<"1. Add Book\n";
+    cout<<"2. Display Books\n";
+    cout<<"3. Issue Books\n";
+    cout<<"4. Return Book\n";
+    cout<<"5. Check Current Records\n";
+    cout<<"6. View History\n";
+    cout<<"7. Exit\n";
+
+    smallLine();
+}
+
+void studentSection()
+{
+    smallLine();
+    cout<<"           STUDENT INFORMATION\n";
+    smallLine();
+}
+
+void issueSection()
+{
+    smallLine();
+    cout<<"              ISSUE DETAILS\n";
+    smallLine();
+}
+
+void bookSection()
+{
+    smallLine();
+    cout<<"              BOOK DETAILS\n";
+    smallLine();
+}
+
+void recordSection()
+{
+    line();
+    cout<<"            CURRENT RECORDS\n";
+    line();
+}
+
+void pauseScreen()
+{
+    cout<<"\nPress ENTER to continue...";
+    cin.ignore();
+    cin.get();
+}
+
+struct Date
+{
+    int day, month, year;
+
+    void input()
+    {
+        char s1,s2;
+        cout<<"Enter date (dd/mm/yyyy): ";
+        cin>>day>>s1>>month>>s2>>year;
+    }
+
+    void display()
+    {
+        cout<<day<<"/"<<month<<"/"<<year;
+    }
+
+    int toDays()
+    {
+        return year*365 + month*30 + day;
+    }
+};
+
+class Student
+{
+private:
+    int id;
+    string name;
+    string dept;
+
+public:
+
+    void input()
+    {
+        studentSection();
+
+        cout<<"Enter Student ID: ";
+        cin>>id;
+        cin.ignore();
+
+        cout<<"Enter Student Name: ";
+        getline(cin,name);
+
+        cout<<"Enter Department: ";
+        getline(cin,dept);
+    }
+
+    string getName()
+    {
+        return name;
+    }
+};
+
+class Book
+{
+private:
+    int id;
+    string title;
+    string author;
+
+    bool issued;
+
+    Student borrower;
+
+    Date issueDate;
+    Date deadlineDate;
+    Date returnDate;
+
+public:
+
+    Book()
+    {
+        issued=false;
+    }
+
+    int getID()
+    {
+        return id;
+    }
+
+    bool isIssued()
+    {
+        return issued;
+    }
+
+    string getTitle()
+    {
+        return title;
+    }
+
+    string getBorrower()
+    {
+        return borrower.getName();
+    }
+
+    Date getDeadline()
+    {
+        return deadlineDate;
+    }
+
+    void addBook()
+    {
+        bookSection();
+
+        cout<<"Enter Book ID: ";
+        cin>>id;
+        cin.ignore();
+
+        cout<<"Enter Book Title: ";
+        getline(cin,title);
+
+        cout<<"Enter Author Name: ";
+        getline(cin,author);
+
+        issued=false;
+    }
+
+    void display()
+    {
+        bookSection();
+
+        cout<<"Book ID      : "<<id<<endl;
+        cout<<"Title        : "<<title<<endl;
+        cout<<"Author       : "<<author<<endl;
+
+        if(issued)
+        {
+            cout<<"Borrowed By  : "<<borrower.getName()<<endl;
+
+            cout<<"Deadline     : ";
+            deadlineDate.display();
+            cout<<endl;
+
+            cout<<"Status       : Issued\n";
+        }
+        else
+            cout<<"Status       : Available\n";
+
+        smallLine();
+    }
+
+    void issueBook(Student s, Date issue, Date deadline)
+    {
+        borrower=s;
+        issueDate=issue;
+        deadlineDate=deadline;
+
+        issued=true;
+
+        ofstream history("history.txt",ios::app);
+
+        history<<borrower.getName()<<" | "
+               <<title<<" | Issue: "
+               <<issue.day<<"/"<<issue.month<<"/"<<issue.year
+               <<" | Deadline: "
+               <<deadline.day<<"/"<<deadline.month<<"/"<<deadline.year
+               <<" | Return: Not Returned | Fine: 0 | Pending\n";
+
+        history.close();
+
+        cout<<"Book issued successfully\n";
+    }
+
+    void returnBook()
+    {
+        if(!issued)
+        {
+            cout<<"Book was not issued\n";
+            return;
+        }
+
+        cout<<"Enter Return Date\n";
+        returnDate.input();
+
+        int lateDays = returnDate.toDays() - deadlineDate.toDays();
+        int fine=0;
+
+        if(lateDays>0)
+            fine=lateDays*50;
+
+        cout<<"Fine: Rs "<<fine<<endl;
+
+        ofstream history("history.txt",ios::app);
+
+        history<<borrower.getName()<<" | "
+               <<title<<" | Issue: "
+               <<issueDate.day<<"/"<<issueDate.month<<"/"<<issueDate.year
+               <<" | Deadline: "
+               <<deadlineDate.day<<"/"<<deadlineDate.month<<"/"<<deadlineDate.year
+               <<" | Return: "
+               <<returnDate.day<<"/"<<returnDate.month<<"/"<<returnDate.year
+               <<" | Fine: "<<fine<<" | Returned\n";
+
+        history.close();
+
+        issued=false;
+
+        cout<<"Book returned successfully\n";
+    }
+};
+class Library
+{
+private:
+    vector<Book> books;
+
+public:
+
+    int availableBooks()
+    {
+        int count=0;
+
+        for(auto &b:books)
+        {
+            if(!b.isIssued())
+                count++;
+        }
+
+        return count;
+    }
+
+    void addBook()
+    {
+        Book b;
+        b.addBook();
+        books.push_back(b);
+    }
+
+    void displayBooks()
+    {
+        if(books.empty())
+        {
+            cout<<"No books available in the library\n";
+            return;
+        }
+
+        for(auto &b:books)
+        {
+            b.display();
+        }
+    }
+
+    void issueBooks()
+    {
+        if(books.empty())
+        {
+            cout<<"No books available\n";
+            return;
+        }
+
+        int available=availableBooks();
+
+        cout<<"Books available: "<<available<<endl;
+
+        int request;
+
+        cout<<"How many books does the student want: ";
+        cin>>request;
+
+        if(request>available)
+        {
+            cout<<"Only "<<available<<" books available\n";
+            return;
+        }
+
+        Student s;
+
+        cout<<"\nEnter Student Details\n";
+        s.input();
+
+        Date issueDate, deadlineDate;
+
+        issueSection();
+
+        cout<<"Enter Issue Date\n";
+        issueDate.input();
+
+        cout<<"Enter Deadline Date\n";
+        deadlineDate.input();
+
+        for(int i=0;i<request;i++)
+        {
+            int id;
+
+            cout<<"\nEnter Book ID: ";
+            cin>>id;
+
+            bool found=false;
+
+            for(auto &b:books)
+            {
+                if(b.getID()==id && !b.isIssued())
+                {
+                    b.issueBook(s,issueDate,deadlineDate);
+                    found=true;
+                    break;
+                }
+            }
+
+            if(!found)
+                cout<<"Book not available\n";
+        }
+    }
+
+    void returnBook()
+    {
+        int id;
+
+        cout<<"Enter Book ID: ";
+        cin>>id;
+
+        for(auto &b:books)
+        {
+            if(b.getID()==id)
+            {
+                b.returnBook();
+                return;
+            }
+        }
+
+        cout<<"Book not found\n";
+    }
+
+    void checkRecords()
+    {
+        if(books.empty())
+        {
+            cout<<"No Active Records\n";
+            return;
+        }
+
+        Date today;
+
+        cout<<"Enter today's date\n";
+        today.input();
+
+        bool found=false;
+
+        recordSection();
+
+        for(auto &b:books)
+        {
+            if(b.isIssued())
+            {
+                found=true;
+
+                cout<<"Student: "<<b.getBorrower()<<endl;
+                cout<<"Book: "<<b.getTitle()<<endl;
+
+                cout<<"Deadline: ";
+                b.getDeadline().display();
+                cout<<endl;
+
+                int lateDays = today.toDays() - b.getDeadline().toDays();
+
+                if(lateDays>0)
+                {
+                    cout<<"Status: OVERDUE\n";
+                    cout<<"Current Fine: "<<lateDays*50<<endl;
+                }
+                else
+                    cout<<"Status: Pending\n";
+
+                smallLine();
+            }
+        }
+
+        if(!found)
+            cout<<"No Active Records\n";
+    }
+
+    void showHistory()
+    {
+        ifstream file("history.txt");
+
+        if(!file)
+        {
+            cout<<"No History Records Found\n";
+            return;
+        }
+
+        string fileContent;
+        bool empty=true;
+
+        line();
+        cout<<"                 HISTORY\n";
+        line();
+
+        while(getline(file,fileContent))
+        {
+            empty=false;
+            cout<<fileContent<<endl;
+        }
+
+
+        if(empty)
+            cout<<"No History Records Found\n";
+    }
+};
+
+
+int main()
+{
+    Library lib;
+
+    int choice;
+
+    do
+    {
+        system("cls");
+
+        welcomeScreen();
+        menuScreen();
+
+        cout<<"Enter choice: ";
+        cin>>choice;
+
+        switch(choice)
+        {
+            case 1: lib.addBook(); break;
+            case 2: lib.displayBooks(); break;
+            case 3: lib.issueBooks(); break;
+            case 4: lib.returnBook(); break;
+            case 5: lib.checkRecords(); break;
+            case 6: lib.showHistory(); break;
+            case 7: cout<<"Exiting...\n"; break;
+            default: cout<<"Invalid choice\n";
+        }
+
+        pauseScreen();
+
+    }while(choice!=7);
+
+    return 0;
+}
