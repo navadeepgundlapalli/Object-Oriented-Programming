@@ -1,0 +1,99 @@
+#include <iostream>
+using namespace std;
+
+template <class T>
+T add(T arr[], int n)
+{
+    T sum = 0;
+    for(int i = 0; i < n; i++)
+        sum += arr[i];
+    return sum;
+}
+
+template <class T>
+T multiply(T arr[], int n)
+{
+    T result = 1;
+    for(int i = 0; i < n; i++)
+        result *= arr[i];
+    return result;
+}
+
+template <class T>
+T subtract(T arr[], int n)
+{
+    T result = arr[0];
+    for(int i = 1; i < n; i++)
+        result -= arr[i];
+    return result;
+}
+
+template <class T>
+T divide(T arr[], int n)
+{
+    T result = arr[0];
+
+    for(int i = 1; i < n; i++)
+    {
+        if(arr[i] == 0)
+            throw "Division by zero error";
+
+        result /= arr[i];
+    }
+
+    return result;
+}
+
+int main()
+{
+    int choice, n;
+
+    cout << "===== Generic Calculator =====\n";
+    cout << "1. Addition\n";
+    cout << "2. Subtraction\n";
+    cout << "3. Multiplication\n";
+    cout << "4. Division\n";
+    cout << "Enter choice: ";
+    cin >> choice;
+
+    cout << "How many numbers? ";
+    cin >> n;
+
+    double arr[n];
+
+    cout << "Enter numbers:\n";
+    for(int i = 0; i < n; i++)
+        cin >> arr[i];
+
+    try
+    {
+        switch(choice)
+        {
+            case 1:
+                cout << "Result = " << add(arr, n) << endl;
+                break;
+
+            case 2:
+                cout << "Result = " << subtract(arr, n) << endl;
+                break;
+
+            case 3:
+                cout << "Result = " << multiply(arr, n) << endl;
+                break;
+
+            case 4:
+                cout << "Result = " << divide(arr, n) << endl;
+                break;
+
+            default:
+                cout << "Invalid choice\n";
+        }
+    }
+
+    catch(const char* msg)
+    {
+        cout << "Error: " << msg << endl;
+    }
+
+    return 0;
+}
