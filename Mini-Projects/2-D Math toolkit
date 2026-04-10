@@ -1,0 +1,153 @@
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+using namespace std;
+
+class Point {
+private:
+    float x, y;
+
+public:
+
+    Point(float a=0, float b=0) {
+        x = a;
+        y = b;
+    }
+
+    void input() {
+        cout << "Enter x coordinate: ";
+        cin >> x;
+        cout << "Enter y coordinate: ";
+        cin >> y;
+    }
+
+    void display() {
+        cout << "(" << x << ", " << y << ")" << endl;
+    }
+
+    Point operator + (Point p) {
+        Point temp;
+        temp.x = x + p.x;
+        temp.y = y + p.y;
+        return temp;
+    }
+
+    Point operator - (Point p) {
+        Point temp;
+        temp.x = x - p.x;
+        temp.y = y - p.y;
+        return temp;
+    }
+
+    Point midpoint(Point p) {
+        Point temp;
+        temp.x = (x + p.x) / 2;
+        temp.y = (y + p.y) / 2;
+        return temp;
+    }
+
+    float distance(Point p) {
+
+        
+        return sqrt(pow(p.x - x,2) + pow(p.y - y,2));
+    }
+
+    operator float() {
+        return sqrt(x*x + y*y);
+    }
+};
+
+void menu() {
+    cout << "\n===== 2D GEOMETRY TOOLKIT =====\n";
+    cout << "1. Midpoint of Two Points\n";
+    cout << "2. Distance Between Two Points\n";
+    cout << "3. Magnitude from Origin\n";
+    cout << "4. Add Two Points\n";
+    cout << "5. Subtract Two Points\n";
+    cout << "6. Exit\n";
+}
+
+int main() {
+
+    Point p1, p2, result;
+    float dist, mag;
+    int choice;
+
+    cout << fixed << setprecision(2);
+
+    do {
+        menu();
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        if(choice == 1) {
+
+            cout << "\nEnter First Point\n";
+            p1.input();
+
+            cout << "Enter Second Point\n";
+            p2.input();
+
+            result = p1.midpoint(p2);
+
+            cout << "Midpoint = ";
+            result.display();
+        }
+
+        else if(choice == 2) {
+
+            cout << "\nEnter First Point\n";
+            p1.input();
+
+            cout << "Enter Second Point\n";
+            p2.input();
+
+            dist = p1.distance(p2);
+
+            cout << "Distance = " << dist << endl;
+        }
+
+        else if(choice == 3) {
+
+            cout << "\nEnter Point\n";
+            p1.input();
+
+            mag = p1;
+
+            cout << "Magnitude from Origin = " << mag << endl;
+        }
+
+        else if(choice == 4) {
+
+            cout << "\nEnter First Point\n";
+            p1.input();
+
+            cout << "Enter Second Point\n";
+            p2.input();
+
+            result = p1 + p2;
+
+            cout << "Addition Result = ";
+            result.display();
+        }
+
+        else if(choice == 5) {
+
+            cout << "\nEnter First Point\n";
+            p1.input();
+
+            cout << "Enter Second Point\n";
+            p2.input();
+
+            result = p1 - p2;
+
+            cout << "Subtraction Result = ";
+            result.display();
+        }
+
+    } while(choice != 6);
+
+    cout << "\nProgram Ended\n";
+
+    return 0;
+}
