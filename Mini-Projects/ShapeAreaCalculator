@@ -1,0 +1,156 @@
+#include <iostream>
+using namespace std;
+
+class Shape
+{
+public:
+    virtual void getData() {}
+    virtual void area() {}
+    virtual void perimeter() {}
+};
+
+class Circle : public Shape
+{
+    float r;
+
+public:
+    void getData()
+    {
+        cout << "Enter radius: ";
+        cin >> r;
+    }
+
+    void area()
+    {
+        cout << "Area of Circle = " << 3.14 * r * r << endl;
+    }
+
+    void perimeter()
+    {
+        cout << "Perimeter of Circle = " << 2 * 3.14 * r << endl;
+    }
+};
+
+class Rectangle : public Shape
+{
+    float l, w;
+
+public:
+    void getData()
+    {
+        cout << "Enter length: ";
+        cin >> l;
+
+        cout << "Enter width: ";
+        cin >> w;
+    }
+
+    void area()
+    {
+        cout << "Area of Rectangle = " << l * w << endl;
+    }
+
+    void perimeter()
+    {
+        cout << "Perimeter of Rectangle = " << 2 * (l + w) << endl;
+    }
+};
+
+class Square : public Shape
+{
+    float s;
+
+public:
+    void getData()
+    {
+        cout << "Enter side: ";
+        cin >> s;
+    }
+
+    void area()
+    {
+        cout << "Area of Square = " << s * s << endl;
+    }
+
+    void perimeter()
+    {
+        cout << "Perimeter of Square = " << 4 * s << endl;
+    }
+};
+
+class Triangle : public Shape
+{
+    float base, height, a, b, c;
+
+public:
+    void getData()
+    {
+        cout << "Enter base: ";
+        cin >> base;
+
+        cout << "Enter height: ";
+        cin >> height;
+
+        cout << "Enter three sides for perimeter: ";
+        cin >> a >> b >> c;
+    }
+
+    void area()
+    {
+        cout << "Area of Triangle = " << 0.5 * base * height << endl;
+    }
+
+    void perimeter()
+    {
+        cout << "Perimeter of Triangle = " << a + b + c << endl;
+    }
+};
+
+int main()
+{
+    Shape *s;
+    Circle c;
+    Rectangle r;
+    Square sq;
+    Triangle t;
+
+    int shapeChoice, operation;
+
+    cout << "===== Geometry Calculator =====\n";
+    cout << "1. Circle\n";
+    cout << "2. Rectangle\n";
+    cout << "3. Square\n";
+    cout << "4. Triangle\n";
+    cout << "Choose a shape: ";
+    cin >> shapeChoice;
+
+    cout << "\n1. Area\n";
+    cout << "2. Perimeter\n";
+    cout << "Choose operation: ";
+    cin >> operation;
+
+    if(shapeChoice == 1)
+        s = &c;
+    else if(shapeChoice == 2)
+        s = &r;
+    else if(shapeChoice == 3)
+        s = &sq;
+    else if(shapeChoice == 4)
+        s = &t;
+    else
+    {
+        cout << "Invalid shape";
+        return 0;
+    }
+
+    s->getData();
+
+    if(operation == 1)
+        s->area();
+    else if(operation == 2)
+        s->perimeter();
+    else
+        cout << "Invalid operation";
+
+    return 0;
+}
