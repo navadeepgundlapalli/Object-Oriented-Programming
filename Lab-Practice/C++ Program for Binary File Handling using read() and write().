@@ -1,0 +1,34 @@
+#include<iostream>
+#include<fstream>
+#include<iomanip>
+using namespace std;
+
+const char* file_name = "Binary";
+
+int main()
+{
+    float height[4] = {100,123,200,234};
+    float weight[4];
+
+    ofstream outFile(file_name, ios::binary);
+    outFile.write(reinterpret_cast<char*>(height), sizeof(height));
+    outFile.close();
+
+    ifstream inFile(file_name, ios::binary);
+
+    if(inFile.fail())
+    {
+        cout<<"Error file does not exist"<<endl;
+        return 1;
+    }
+
+    inFile.read(reinterpret_cast<char*>(weight), sizeof(weight));
+    inFile.close();
+
+    for(int i=0;i<4;i++)
+    {
+        cout<<setw(10)<<height[i]<<setw(10)<<weight[i]<<endl;
+    }
+
+    return 0;
+}
