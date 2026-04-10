@@ -1,0 +1,66 @@
+#include <iostream>
+using namespace std;
+
+class Employee
+{
+protected:
+    string name;
+    int id;
+    string role;
+
+public:
+    void getEmployeeData()
+    {
+        cout << "Enter Employee Name: ";
+        cin >> name;
+
+        cout << "Enter Employee ID: ";
+        cin >> id;
+
+        cout << "Enter Employee Role: ";
+        cin >> role;
+    }
+
+    void displayEmployee()
+    {
+        cout << "\nEmployee Details\n";
+        cout << "Name: " << name << endl;
+        cout << "ID: " << id << endl;
+        cout << "Role: " << role << endl;
+    }
+};
+
+class Manager : public Employee
+{
+    int salary;
+    int bonus;
+
+public:
+    void getManagerData()
+    {
+        getEmployeeData();
+
+        cout << "Enter Base Salary: ";
+        cin >> salary;
+
+        cout << "Enter Bonus: ";
+        cin >> bonus;
+    }
+
+    void calculateSalary()
+    {
+        int total = salary + bonus;
+        cout << "Total Salary: " << total << endl;
+    }
+};
+
+int main()
+{
+    Manager m;
+
+    m.getManagerData();
+    m.displayEmployee();
+    m.calculateSalary();
+
+    return 0;
+}
